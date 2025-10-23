@@ -2,7 +2,7 @@ import sys, os
 print("PYTHONPATH:", os.environ.get("PYTHONPATH"))
 print("sys.path:", sys.path)
 sys.modules.pop("requests", None)
-# sys.path = ['/volume1/@appstore/Python3.9/usr/lib/python3.9/site-packages']
+sys.path.append('/volume1/@appstore/Python3.9/usr/lib/python3.9/site-packages')
 
 print("Python version:", sys.version)
 print("Python executable:", sys.executable)
@@ -99,4 +99,5 @@ if __name__ == "__main__":
     
     display_pokemon(pokemon)
     send_to_discord(pokemon, webhook_url)
+
 
