@@ -1,0 +1,23 @@
+name: Daily Pokémon Drop
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Runs at 8 AM BST (7 AM UTC)
+
+jobs:
+  run-potd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run POTD script
+        run: python POTD.py
