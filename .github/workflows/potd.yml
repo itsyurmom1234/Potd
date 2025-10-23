@@ -20,5 +20,5 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run POTD script
+      - name: Run POTD.py
         run: python POTD.py
