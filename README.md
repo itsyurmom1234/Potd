@@ -80,9 +80,3 @@ Alternate data sources
 MIT — free to use, modify, and share.
 
 Built by Dean, automated with flair, and themed for fans. Gotta drop 'em all.
-
-Code
-
----
-
-Let me know if you want to add badges, a sample Discord screenshot, or a changelog section. We
