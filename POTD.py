@@ -3,24 +3,47 @@ print("PYTHONPATH:", os.environ.get("PYTHONPATH"))
 print("sys.path:", sys.path)
 sys.modules.pop("requests", None)
 sys.path.append('/volume1/@appstore/Python3.9/usr/lib/python3.9/site-packages')
-
 print("Python version:", sys.version)
 print("Python executable:", sys.executable)
-
 sys.path = [p for p in sys.path if "Pc/other stuff" not in p]
 import requests
 print("Using requests from:", getattr(requests, '__file__', 'None'))
-
 print("Using requests from:", getattr(requests, '__file__', 'None'))
 print("requests contents:", dir(requests))
-
 print("Using requests from:", requests.__file__)
 print("Type of requests:", type(requests))
 print("Contents of requests:", dir(requests))
-
 print("Using requests from:", requests.__file__)
-
 import random
+from datetime import datetime
+
+def get_tng_stardate():
+    """
+    Calculate TNG-era stardate based on current date
+    TNG stardates: 41000.0 (2364) to 47988.0 (2370)
+    Formula approximation for realism
+    """
+    now = datetime.now()
+    
+    # TNG aired from 1987-1994, set in 2364-2370
+    # Base year 2364 = stardate 41000
+    # Roughly 1000 stardate units per year
+    
+    base_year = 2364
+    base_stardate = 41000.0
+    current_year = now.year
+    
+    # Calculate years since TNG era started
+    years_offset = current_year - base_year
+    
+    # Calculate day of year progress (0-365)
+    day_of_year = now.timetuple().tm_yday
+    day_fraction = day_of_year / 365.0
+    
+    # Calculate stardate
+    stardate = base_stardate + (years_offset * 1000) + (day_fraction * 1000)
+    
+    return f"{stardate:.1f}"
 
 def get_random_pokemon_id():
     # PokéAPI currently supports up to Gen IX (1010 Pokémon as of Oct 2025)
@@ -30,14 +53,14 @@ def fetch_pokemon_data(pokemon_id):
     base_url = "https://pokeapi.co/api/v2"
     pokemon_url = f"{base_url}/pokemon/{pokemon_id}"
     species_url = f"{base_url}/pokemon-species/{pokemon_id}"
-
+    
     pokemon_data = requests.get(pokemon_url).json()
     species_data = requests.get(species_url).json()
-
+    
     # Evolution chain
     evo_chain_url = species_data["evolution_chain"]["url"]
     evo_chain_data = requests.get(evo_chain_url).json()
-
+    
     return {
         "name": pokemon_data["name"].title(),
         "id": pokemon_data["id"],
@@ -75,7 +98,11 @@ def display_pokemon(pokemon):
     print(f"Sprite URL: {pokemon['sprite']}")
 
 def send_to_discord(pokemon, webhook_url):
+    stardate = get_tng_stardate()
+    
     content = (
+        f"**Stardate {stardate}**\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
         f"🌟 **Pokémon of the Day** 🌟\n"
         f"**Name:** {pokemon['name']} (#{pokemon['id']})\n"
         f"**Types:** {', '.join(pokemon['types'])}\n"
@@ -86,10 +113,9 @@ def send_to_discord(pokemon, webhook_url):
         f"**Flavor Text:** {pokemon['flavor_text']}\n"
         f"[Sprite Image]({pokemon['sprite']})"
     )
-
+    
     payload = {"content": content}
     requests.post(webhook_url, json=payload)
-
 
 if __name__ == "__main__":
     webhook_url = "https://discord.com/api/webhooks/1428475018857152663/LET-lcuKHH7HscwKKa37jjHyWXYLHqyN03CimnqMdlgj7p4JyP9wJjoLQUZ_IGyJjLI0"
@@ -99,5 +125,3 @@ if __name__ == "__main__":
     
     display_pokemon(pokemon)
     send_to_discord(pokemon, webhook_url)
-
-
