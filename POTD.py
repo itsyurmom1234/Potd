@@ -118,10 +118,11 @@ def send_to_discord(pokemon, webhook_url):
     requests.post(webhook_url, json=payload)
 
 if __name__ == "__main__":
-    webhook_url = "https://discord.com/api/webhooks/1428475018857152663/LET-lcuKHH7HscwKKa37jjHyWXYLHqyN03CimnqMdlgj7p4JyP9wJjoLQUZ_IGyJjLI0"
+    webhook_url = os.environ.get("DISCORD_WEBHOOK_URL")
     
     random_id = get_random_pokemon_id()
     pokemon = fetch_pokemon_data(random_id)
     
     display_pokemon(pokemon)
     send_to_discord(pokemon, webhook_url)
+
