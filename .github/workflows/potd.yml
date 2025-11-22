@@ -2,7 +2,7 @@ name: Daily Pokémon Drop
 
 on:
   schedule:
-    - cron: '45 7 * * *'  
+    - cron: '0 9 * * *'  
   workflow_dispatch:
 
 jobs:
